@@ -15,23 +15,61 @@ void Main()
 
 	var trie = new Trie(words);
 
+	Console.WriteLine("Running tests ...");
+	RunTests();
+	Console.WriteLine("Done!");
+}
+
+void RunTests()
+{
+	var words = new[]
+{
+		"apple",
+		"ant",
+		"banana",
+		"boingo",
+		"fish",
+		"frog",
+		"dog",
+		"donkey",
+		"zebra"
+	};
+
+	var trie = new Trie(words);
+	
 	{
+		Console.Write("Exact matched matches full word ... ");
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word));
 		}
+		Console.WriteLine("Pass!");
 	}
 	{
+		Console.Write("Partial match matches partial word ... ");
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word[0..2], false));
 		}
+		Console.WriteLine("Pass!");
 	}
 	{
+		Console.Write("Exact match does not match partial word ... ");
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word[0..2]) == false);
 		}
+		Console.WriteLine("Pass!");
+	}
+	{
+		Console.Write("Exact match does not match non-existent word ... ");
+		Debug.Assert(trie.Search("DOESNT EXIST") == false);
+		Console.WriteLine("Pass!");
+	}
+	{
+		Console.Write("Partial match does not match non-existent word ... ");
+		Debug.Assert(trie.Search("DOESNT EXIST", false) == false);
+		Console.WriteLine("Pass!");
 	}
 }
 
