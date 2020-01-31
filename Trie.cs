@@ -1,20 +1,5 @@
 void Main()
 {
-	var words = new[]
-	{
-		"apple",
-		"ant",
-		"banana",
-		"boingo",
-		"fish",
-		"frog",
-		"dog",
-		"donkey",
-		"zebra"
-	};
-
-	var trie = new Trie(words);
-
 	Console.WriteLine("Running tests ...");
 	RunTests();
 	Console.WriteLine("Done!");
@@ -23,7 +8,7 @@ void Main()
 void RunTests()
 {
 	var words = new[]
-{
+	{
 		"apple",
 		"ant",
 		"banana",
