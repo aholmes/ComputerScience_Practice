@@ -21,7 +21,7 @@ void RunTests()
 	};
 
 	{
-		Console.Write("Exact matched matches full word ... ");
+		Console.Write("Exact match matches full word ... ");
 		var trie = new Trie(words);
 		foreach (var word in words)
 		{
