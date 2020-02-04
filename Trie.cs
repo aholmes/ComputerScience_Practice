@@ -20,10 +20,9 @@ void RunTests()
 		"zebra"
 	};
 
-	var trie = new Trie(words);
-	
 	{
 		Console.Write("Exact matched matches full word ... ");
+		var trie = new Trie(words);
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word));
@@ -32,6 +31,7 @@ void RunTests()
 	}
 	{
 		Console.Write("Partial match matches partial word ... ");
+		var trie = new Trie(words);
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word[0..2], false));
@@ -40,6 +40,7 @@ void RunTests()
 	}
 	{
 		Console.Write("Exact match does not match partial word ... ");
+		var trie = new Trie(words);
 		foreach (var word in words)
 		{
 			Debug.Assert(trie.Search(word[0..2]) == false);
@@ -48,11 +49,13 @@ void RunTests()
 	}
 	{
 		Console.Write("Exact match does not match non-existent word ... ");
+		var trie = new Trie(words);
 		Debug.Assert(trie.Search("DOESNT EXIST") == false);
 		Console.WriteLine("Pass!");
 	}
 	{
 		Console.Write("Partial match does not match non-existent word ... ");
+		var trie = new Trie(words);
 		Debug.Assert(trie.Search("DOESNT EXIST", false) == false);
 		Console.WriteLine("Pass!");
 	}
@@ -67,13 +70,13 @@ public class Trie
 			this.Insert(word);
 		}
 	}
-	
+
 	private TrieNode _root = new TrieNode();
-	
+
 	public void Insert(string word)
 	{
 		var tree = _root;
-		
+
 		foreach(var character in word)
 		{
 			if (!tree.Nodes.ContainsKey(character))
@@ -90,7 +93,7 @@ public class Trie
 
 		tree.EndOfWord = true;
 	}
-	
+
 	public bool Search(string key, bool exact = true)
 	{
 		var tree = _root;
