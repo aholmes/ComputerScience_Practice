@@ -79,15 +79,15 @@ public class Trie
 
 		foreach(var character in word)
 		{
-			if (!tree.Nodes.ContainsKey(character))
+			if (tree.Nodes.ContainsKey(character))
+			{
+				tree = tree.Nodes[character];
+			}
+			else
 			{
 				var newNode = new TrieNode();
 				tree.Nodes.Add(character, newNode);
 				tree = newNode;
-			}
-			else
-			{
-				tree = tree.Nodes[character];
 			}
 		}
 
