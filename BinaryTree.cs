@@ -2,13 +2,17 @@
 
 void Main()
 {
-	var data = new[] { 'A', 'B', 'C', 'D', 'E', 'F', 'G'};//, 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
-	//GetTree(data).Dump();
-	var tree = GetTree(data);
+	// These are all ordered to A - G (ascending)
+	var tree = GetTree(new[] { 'D', 'B', 'F', 'A', 'C', 'E', 'G'});
 	InOrderTraversal(tree, node => { Console.Write(node.Value); });
 	Console.WriteLine();
+	
+	tree = GetTree(new[] { 'A', 'B', 'E', 'C', 'D', 'F', 'G' });
 	PreOrderTraversal(tree, node => { Console.Write(node.Value); });
 	Console.WriteLine();
+	
+	tree = GetTree(new[] { 'G', 'C', 'F', 'A', 'B', 'D', 'E' });
+	tree.Dump();
 	PostOrderTraversal(tree, node => { Console.Write(node.Value); });
 	Console.WriteLine();
 }
@@ -46,6 +50,17 @@ public BinaryTreeNode GetTree(char[] values)
 }
 
 // In a binary search tree, this visits nodes in ascending order
+/*
+ex:
+
+     D
+   /   \
+  B     F
+ / \   / \
+A   C E   G
+
+A B C D E F G
+*/
 public void InOrderTraversal(BinaryTreeNode node, Action<BinaryTreeNode> visit)
 {
 	if (node == null) return;
@@ -55,6 +70,17 @@ public void InOrderTraversal(BinaryTreeNode node, Action<BinaryTreeNode> visit)
 }
 
 // Visits the root node first
+/*
+ex:
+
+     A
+   /   \
+  B     E
+ / \   / \
+C   D F   G
+
+A B C D E F G
+*/
 public void PreOrderTraversal(BinaryTreeNode node, Action<BinaryTreeNode> visit)
 {
 	if (node == null) return;
@@ -64,6 +90,17 @@ public void PreOrderTraversal(BinaryTreeNode node, Action<BinaryTreeNode> visit)
 }
 
 // Visits the root node last
+/*
+ex:
+
+     G
+   /   \
+  C     F
+ / \   / \
+A   B D   E
+
+A B C D E F G
+*/
 public void PostOrderTraversal(BinaryTreeNode node, Action<BinaryTreeNode> visit)
 {
 	if (node == null) return;
