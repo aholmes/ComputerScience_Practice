@@ -17,14 +17,19 @@ namespace NQueen
             Console.OutputEncoding = Encoding.UTF8;
             Console.CursorVisible = false;
 
-            var nQueen = new NQueen(16, 300);
+            const int N = 8;
+            const int displayDelay = 0;
+
+            var nQueen = new NQueen(N, displayDelay);
+
             var sw = new Stopwatch();
             sw.Start();
             var result = nQueen.Go(slow: false);
             sw.Stop();
+
             nQueen.DisplayBoard(0);
-            Console.WriteLine($"Time taken: {sw.ElapsedTicks / 10000}");
-            Console.WriteLine(result);
+            Console.WriteLine($"N={N} {(result ? "has a solution" : "does not have a solution")}");
+            Console.WriteLine($"Time taken: {sw.ElapsedTicks / 10000}ms");
         }
 
         const string Black = "\u001b[30m\u001b[40m";
@@ -72,6 +77,7 @@ namespace NQueen
                 }
             }
 
+            #region Slow approach
             private bool isSafeSlow(int row, int col)
             {
                 // check all squares to the left
@@ -147,7 +153,9 @@ namespace NQueen
 
                 return false;
             }
+            #endregion
 
+            #region Faster approach
             private readonly bool[] ld;
             private readonly bool[] rd;
             private readonly bool[] cl;
@@ -158,16 +166,16 @@ namespace NQueen
 
                 for(var row = 0; row < N; row++)
                 {
-                    var checkOld = _board[row, col];
+                    var old = _board[row, col];
                     _board[row, col] = Color(Q, Magenta);
                     displayFromRowCol(row, col, 1);
-                    _board[row, col] = checkOld;
+                    _board[row, col] = old;
 
                     var ldiag = row - col + N - 1;
                     var rdiag = row + col;
                     if (!ld[ldiag] && !rd[rdiag] && !cl[row])
                     {
-                        var old = _board[row, col];
+                        old = _board[row, col];
                         _board[row, col] = Color(Q, Green);
                         displayFromRowCol(row, col);
                         ld[ldiag] = rd[rdiag] = cl[row] = true;
@@ -181,6 +189,9 @@ namespace NQueen
 
                 return false;
             }
+            #endregion
+
+            public bool Go(bool slow) => slow ? solveSlow(0) : solveFast(0);
 
             private void displayFromRowCol(int row, int col, int? wait = null)
             {
@@ -217,13 +228,6 @@ namespace NQueen
                     temp[r, c] = _board[r, c];
                     _board[r, c] = getChar(temp[r, c]);
                 }
-                //for(var i = 0; i < downRight; i++)
-                //{
-                //    var r = row + i + 1;
-                //    var c = col + i + 1;
-                //    temp[r, c] = _board[r, c];
-                //    _board[r, c] = getChar(temp[r, c]);
-                //}
                 for(var i = 0; i < downLeft; i++)
                 {
                     var r = row + i + 1;
@@ -231,13 +235,6 @@ namespace NQueen
                     temp[r, c] = _board[r, c];
                     _board[r, c] = getChar(temp[r, c]);
                 }
-                //for(var i = 0; i < upRight; i++)
-                //{
-                //    var r = row - i - 1;
-                //    var c = col + i + 1;
-                //    temp[r, c] = _board[r, c];
-                //    _board[r, c] = getChar(temp[r, c]);
-                //}
 
                 DisplayBoard(wait ?? displayDelay);
 
@@ -253,67 +250,13 @@ namespace NQueen
                     var c = col - i - 1;
                     _board[r, c] = temp[r, c];
                 }
-                //for(var i = 0; i < downRight; i++)
-                //{
-                //    var r = row + i + 1;
-                //    var c = col + i + 1;
-                //    _board[r, c] = temp[r, c];
-                //}
                 for(var i = 0; i < downLeft; i++)
                 {
                     var r = row + i + 1;
                     var c = col - i - 1;
                     _board[r, c] = temp[r, c];
                 }
-                //for(var i = 0; i < upRight; i++)
-                //{
-                //    var r = row - i - 1;
-                //    var c = col + i + 1;
-                //    _board[r, c] = temp[r, c];
-                //}
-
-                /*
-O O O O
-O O O O
-O X O O
-O O O O
-
-r=2,c=1
-
-r-i: 2-1=1
-1-1=0
-
-2+(2-1)=3
-2+(1-1)=2
-
-
-
-1,0
-3,2
-
-                 */
-
-                //var temp = new string[row*2,col*2];
-                //for(int r = row-1, c = col-1; r >= 0 && c >= 0; r--, c--)
-                //{
-                //    var r2 = row + (row - r);
-                //    var c2 = col + (col - c);
-                //    temp[r, c] = _board[r, c];
-                //    temp[r2-1, c2-1] = _board[r2, c2];
-                //    _board[r, c] = Color(X, Cyan);
-                //    _board[r2, c2] = Color(X, Cyan);
-                //}
-                //DisplayBoard(displayDelay);
-                //for(int r = row-1, c = col-1; r >= 0 && c >= 0; r--, c--)
-                //{
-                //    var r2 = row + (row - r);
-                //    var c2 = col + (col - c);
-                //    _board[r, c] = temp[r, c];
-                //    _board[r2, c2] = temp[r2-1, c2-1];
-                //}
             }
-
-            public bool Go(bool slow) => slow ? solveSlow(0) : solveFast(0);
 
             public void DisplayBoard(int wait, bool reset = true)
             {
@@ -327,13 +270,14 @@ r-i: 2-1=1
                     {
                         sb.AppendLine();
                     }
-                    sb.Append(_board[row, col]);// + " ");
+                    sb.Append(_board[row, col]);
                 }
 
                 if(reset)
                 {
                     Console.SetCursorPosition(0, 0);
                 }
+
                 Console.WriteLine(sb.ToString());
 
                 if(wait > 0)
