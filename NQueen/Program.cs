@@ -17,7 +17,7 @@ namespace NQueen
             Console.OutputEncoding = Encoding.UTF8;
             Console.CursorVisible = false;
 
-            var nQueen = new NQueen(16, 100);
+            var nQueen = new NQueen(16, 300);
             var sw = new Stopwatch();
             sw.Start();
             var result = nQueen.Go(slow: false);
@@ -160,7 +160,7 @@ namespace NQueen
                 {
                     var checkOld = _board[row, col];
                     _board[row, col] = Color(Q, Magenta);
-                    displayFromRowCol(row, col);
+                    displayFromRowCol(row, col, 1);
                     _board[row, col] = checkOld;
 
                     var ldiag = row - col + N - 1;
